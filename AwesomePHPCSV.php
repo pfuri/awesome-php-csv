@@ -12,7 +12,7 @@
  * 
  * @copyright 2016 Paul Furiani
  * 
- * @version 1.3
+ * @version 1.3.0
  * 
  */
 class AwesomePHPCSV {
