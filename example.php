@@ -19,8 +19,8 @@
 	
 	// create the options array
 	$options = array(
-			'pathToFile' => 'example.csv',
-			'hasHeadingRow' => true
+	    'pathToFile' => 'example.csv',
+	    'hasHeadingRow' => true
 	);
 	
 	// create an AwesomePHPCSV instance
@@ -30,7 +30,4 @@
 	$data = $apcsv->import($options);
 	
 	// print the result
-	echo '<pre>';
-		print_r($data);
-	echo '</pre>';
-?>
+	echo '<pre>'.print_r($data, true).'</pre>';
