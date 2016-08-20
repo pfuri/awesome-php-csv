@@ -15,7 +15,8 @@
  * @version 1.3.0
  * 
  */
-class AwesomePHPCSV {
+class AwesomePHPCSV 
+{
 	
 	public $errorMessages = array();
 	
@@ -37,20 +38,21 @@ class AwesomePHPCSV {
 	 *
 	 * @return boolean|array - the csv in array format or boolean FALSE if there was an error
 	 */
-	public function import(array $options = array()) {
+	public function import(array $options = array()) 
+	{
 		// reset error messages for new import
 		$this->reset();
 		
 		// set defaults & merge in the options
 		$defaults = array(
-				'pathToFile' => '',
-				'file' => null, 
-				'hasHeadingRow' => false, 
-				'columns' => null, 
-				'start' => 1, 
-				'end' => null, 
-				'loopLimit' => 100, 
-				'debug' => false
+			'pathToFile' => '',
+			'file' => null, 
+			'hasHeadingRow' => false, 
+			'columns' => null, 
+			'start' => 1, 
+			'end' => null, 
+			'loopLimit' => 100, 
+			'debug' => false
 		);
 		$options = array_merge($defaults, $options);
 		
@@ -65,10 +67,10 @@ class AwesomePHPCSV {
 		$start = $options['start'];
 
 		// load CSV 
-		if(!is_array($file)) {
+		if (!is_array($file)) {
 			$file = file($pathToFile, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
 		}
-		if($file === false) { 
+		if ($file === false) { 
 			$message = __('Error: could not load file: ').$pathToFile;
 			$this->errorMessages[] = $message; 
 			return false;
@@ -76,15 +78,15 @@ class AwesomePHPCSV {
 
 		// parse CSV
 		$parsedCSV = array();
-		for($i = $start - 1; $i < count($file); $i++) {
+		for ($i = $start - 1; $i < count($file); $i++) {
 			$line = $file[$i];
-			if($hasHeadingRow && $i == 0) {
+			if ($hasHeadingRow && $i == 0) {
 				// skip heading row
 				continue; 
-			} elseif($end && $i > $end) {
+			} elseif ($end && $i > $end) {
 				// stop at end
 				break; 
-			} elseif(trim($line) == "") {
+			} elseif (trim($line) == "") {
 				// skip empty lines
 				continue; 
 			}
@@ -96,25 +98,25 @@ class AwesomePHPCSV {
 			$term = '';
 			
 			// parse CSV
-			while($startPos <= strlen($line)) {
+			while ($startPos <= strlen($line)) {
 				// check loop limit
-				if($counter > $loopLimit) { 
+				if ($counter > $loopLimit) { 
 					$this->errorMessages[] = __('Error parsing row on line: ').($i + 1).__(', Loop limit of ').$loopLimit.__(' exceeded'); 
 					return false; 
 				}
 				
 				// string or term?
-				if(substr($line, $startPos, 1) == '"') { // string
+				if (substr($line, $startPos, 1) == '"') { // string
 					// init string extractor
 					$searchPos = $startPos + 1; 
 					$length = 0; 
 					$found = false;
 					
 					// extract string
-					while(!$found) {
+					while (!$found) {
 						// extract string up until next quote
 						$nextQuotePos = strpos($line, '"', $searchPos); 
-						if($nextQuotePos === false) {
+						if ($nextQuotePos === false) {
 							$message =  __('Error parsing row on line: ').($i + 1).__('. Could not locate end of string');
 							$this->errorMessages[] = $message; 
 							return false; 
@@ -122,7 +124,7 @@ class AwesomePHPCSV {
 						
 						// determine end of string or inner quote
 						$charAfterNextQuote = substr($line, $nextQuotePos + 1, 1);
-						if($charAfterNextQuote === false || $charAfterNextQuote == ',') { // end of string
+						if ($charAfterNextQuote === false || $charAfterNextQuote == ',') { // end of string
 							// Extract the full term, with wrapping quotes
 							$length = ($nextQuotePos - $startPos) + 1;
 							$term = substr($line, $startPos, $length); 
@@ -150,8 +152,8 @@ class AwesomePHPCSV {
 					$nextCommaPos = strpos($line, ',', $startPos);
 					
 					// extract term
-					if($nextCommaPos === false) { // last term
-						if($startPos == strlen($line)) {
+					if ($nextCommaPos === false) { // last term
+						if ($startPos == strlen($line)) {
 							// last term empty, do special handling
 							$term = ""; 
 						} else {
@@ -182,7 +184,7 @@ class AwesomePHPCSV {
 
 			// validate
 			$valid = $columns == null || count($rowData) == $columns; // column validation
-			if(!$valid) { 
+			if (!$valid) { 
 				$message = __('Error, wrong number of columns parsed on line ').($i + 1).__('. Expecting: ').$columns.__(', Found: ').count($rowData);
 				$this->errorMessages[] = $message; 
 				return false; 
@@ -200,7 +202,8 @@ class AwesomePHPCSV {
 	/**
 	 * resets the error messages
 	 */
-	public function reset() { 
+	public function reset() 
+	{ 
 		$this->errorMessages = array();
 	}
 }
