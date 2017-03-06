@@ -126,7 +126,7 @@ class AwesomePHPCSV
                         
                         // determine end of string or inner quote
                         $charAfterNextQuote = substr($line, $nextQuotePos + 1, 1);
-                        if ($charAfterNextQuote === false || $charAfterNextQuote == ',') { // end of string
+                        if (in_array($charAfterNextQuote, array(false, '', ','))) { // end of string
                             // Extract the full term, with wrapping quotes
                             $length = ($nextQuotePos - $startPos) + 1;
                             $term = substr($line, $startPos, $length);
