@@ -28,7 +28,7 @@ Or in your composer.json file add pfuri/awesome-php-csv to the list of required 
 }
 ```
 
-**2.** use pfuri/AwesomePHP
+**2.** create an AwesomePHPCSV instance:
 ```php
 use pfuri\AwesomePHPCSV;
 
