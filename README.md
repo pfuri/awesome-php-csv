@@ -8,14 +8,36 @@ AwesomePHPCSV is a simple, fast &amp; lightweight CSV parser built for PHP 5.3+
 
 AwesomePHPCSV is simple and easy to use.  Just follow the instructions below:
 
-**1.** include AwesomePHPCSV into your own PHP project:
-```php
-include 'AwesomePHPCSV';
+**1.** include AwesomePHPCSV into your own PHP project via Composer.  
+
+From the command line:
+```
+composer require pfuri/awesomephp-csv:~2.0
 ```
 
-**2.** create an AwesomePHPCSV instance: 
+Or in your composer.json file add pfuri/awesome-php-csv to the list of required packages and then run `composer update`:
+```javascript
+{
+    ...
+    "require": {
+        ...
+        "pfuri/awesome-php-csv": "~2.0",
+        ...
+    }
+    ...
+}
+```
+
+**2.** use pfuri/AwesomePHP
 ```php
+use pfuri\AwesomePHPCSV;
+
 $apcsv = new AwesomePHPCSV();
+```
+
+***Having trouble?  Don't forget to include the Composer autoload.php file!"***
+```php
+require __DIR__ . '/vendor/autoload.php';
 ```
 
 **3.** create an options array (see options section below for a full set of options):
