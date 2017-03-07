@@ -2,17 +2,20 @@
 
 AwesomePHPCSV is a simple, fast &amp; lightweight CSV parser built for PHP 5.3+
 
+# Breaking Changes in 2.1
+**1.** `hasHeadingRow` parameter has been renamed to `skipHeaderRow` which is what it actually does
 
+**2.** `mapColumns` parameter has been added to use the values from the first row as associative array keys for the rest of the rows in the returned results *(may lower performance)*
 
 # Usage
 
 AwesomePHPCSV is simple and easy to use.  Just follow the instructions below:
 
-**1.** include AwesomePHPCSV into your own PHP project via Composer.  
+**1.** include AwesomePHPCSV into your own PHP project via Composer.
 
 From the command line:
 ```
-composer require pfuri/awesomephp-csv:~2.0
+composer require pfuri/awesomephp-csv:~2.1
 ```
 
 Or in your composer.json file add pfuri/awesome-php-csv to the list of required packages and then run `composer update`:
@@ -21,7 +24,7 @@ Or in your composer.json file add pfuri/awesome-php-csv to the list of required 
     ...
     "require": {
         ...
-        "pfuri/awesome-php-csv": "~2.0",
+        "pfuri/awesome-php-csv": "~2.1",
         ...
     }
     ...
@@ -44,7 +47,7 @@ require __DIR__ . '/vendor/autoload.php';
 ```php
 $options = array(
     'pathToFile' => 'example.csv',
-    'hasHeadingRow' => true
+    'hasHeaderRow' => true
 );
 ```
 
@@ -68,7 +71,8 @@ Below is the complete list of options for ***AwesomePHPCSV::import(array $option
 
 * *string **pathToFile** (required)*: The full path to the csv file to be parsed *(note: if ***file*** is used instead of ***pathToFile***, then ***pathToFile*** is not required)*
 * *string **file** (optional)*: The CSV file in array format, where each row of the CSV is a string in the array *(note: must not include line endings)*
-* *boolean **hasHeadingRow** (optional) (default: false)*: Whether or not the csv has a heading row to ignore
+* *boolean **skipHeaderRow** (optional) (default: false)*: Whether or not to skip the first row
+* *boolean **mapColumns** (optional) (default: false)*: use the values from the first row as associative array keys for the rest of the rows in the returned results *(may lower performance)*
 * *int **columns** (optional) (default: null)*: Enables column validation by specifying how many the columns each row should have.  If the csv contains a row without exactly this many columns, import will fail
 * *int **start** (optional) (default:1)*: The row to start on [inclusive]
 * *int **end** (optional) (default:null)*: The row to end on [inclusive]
@@ -98,4 +102,4 @@ Then after importing, you would receive a PHP array that looks like:
 
 
 # Example File
-*example.php* will import *example.csv* and output the results.  
+*example.php* will import *example.csv* and output the results.
