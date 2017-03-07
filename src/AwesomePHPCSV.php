@@ -32,6 +32,7 @@ class AwesomePHPCSV
      * 			<li><em>string <strong>pathToFile</strong> (required)</em>: The full path to the csv file to be parsed <em>(note: if file is used instead of pathToFile, then pathToFile is not required)</em></li>
      * 			<li><em>array <strong>file</strong> (optional)</em>: The CSV file in array format, where each row of the CSV is a string in the array <em>(note: must not include line endings)</em>
      * 			<li><em>boolean <strong>hasHeaderRow</strong> (optional) (default: false)</em>: Whether or not the csv has a heading row to ignore</li>
+     *          <li><em>boolean <strong>mapColumns</strong> (optional) (default: false)</em>: Whether or not to use the first row values as keys for the rest of the rows in the returned results. The first row will not be returned in the results (may slow performance)</li>
      *			<li><em>int <strong>columns</strong> (optional) (default: null): Enables column validation by specifying how many the columns each row should have.  If the csv contains a row without exactly this many columns, import will fail</li>
      *			<li><em>int <strong>start</strong> (optional) (default:1)</em>: The row to start on [inclusive]</li>
      *			<li><em>int <strong>end</strong> (optional) (default:null)</em>: The row to end on [inclusive]</li>
@@ -50,6 +51,7 @@ class AwesomePHPCSV
             'pathToFile' => '',
             'file' => null,
             'hasHeaderRow' => false,
+            'mapColumns' => false,
             'columns' => null,
             'start' => 1,
             'end' => null,
@@ -63,6 +65,7 @@ class AwesomePHPCSV
         $debug = $options['debug'];
         $end = $options['end'];
         $hasHeaderRow = $options['hasHeaderRow'];
+        $mapColumns = $options['mapColumns'];
         $file = $options['file'];
         $loopLimit = $options['loopLimit'];
         $pathToFile = $options['pathToFile'];
@@ -79,6 +82,7 @@ class AwesomePHPCSV
         }
 
         // parse CSV
+        $headerRow = array();
         $parsedCSV = array();
         for ($i = $start - 1; $i < count($file); $i++) {
             $line = $file[$i];
@@ -138,8 +142,16 @@ class AwesomePHPCSV
                             // unescape inner quotes
                             $term = str_replace('""', '"', $term);
                             
-                            // add term to csv row
-                            $rowData[] = $term;
+                            // add term to CSV row
+                            if($i != 0 && $mapColumns) {
+                                // header name index
+                                $headerRowInd = count($rowData);
+                                $headerName = $headerRow[$headerRowInd];
+                                $rowData[$headerName] = $term;
+                            } else {
+                                // numeric index
+                                $rowData[] = $term;
+                            }
                             
                             // update parser
                             $found = true;
@@ -177,7 +189,15 @@ class AwesomePHPCSV
                     }
                     
                     // add term to CSV row
-                    $rowData[] = $term;
+                    if($i != 0 && $mapColumns) {
+                        // header name index
+                        $headerRowInd = count($rowData);
+                        $headerName = $headerRow[$headerRowInd];
+                        $rowData[$headerName] = $term;
+                    } else {
+                        // numeric index
+                        $rowData[] = $term;
+                    }
                 }
                 
                 // update loop counter
@@ -191,9 +211,13 @@ class AwesomePHPCSV
                 $this->errorMessages[] = $message;
                 return false;
             }
-            
-            // add CSV row to CSV array
-            $parsedCSV[] = $rowData;
+
+            if($i == 0 && $mapColumns) {
+                $headerRow = $rowData;
+            } else {        
+                // add CSV row to CSV array
+                $parsedCSV[] = $rowData;
+            }
         }
         
         // return CSV array
