@@ -31,7 +31,7 @@ class AwesomePHPCSV
      * 		<ul>
      * 			<li><em>string <strong>pathToFile</strong> (required)</em>: The full path to the csv file to be parsed <em>(note: if file is used instead of pathToFile, then pathToFile is not required)</em></li>
      * 			<li><em>array <strong>file</strong> (optional)</em>: The CSV file in array format, where each row of the CSV is a string in the array <em>(note: must not include line endings)</em>
-     * 			<li><em>boolean <strong>hasHeadingRow</strong> (optional) (default: false)</em>: Whether or not the csv has a heading row to ignore</li>
+     * 			<li><em>boolean <strong>hasHeaderRow</strong> (optional) (default: false)</em>: Whether or not the csv has a heading row to ignore</li>
      *			<li><em>int <strong>columns</strong> (optional) (default: null): Enables column validation by specifying how many the columns each row should have.  If the csv contains a row without exactly this many columns, import will fail</li>
      *			<li><em>int <strong>start</strong> (optional) (default:1)</em>: The row to start on [inclusive]</li>
      *			<li><em>int <strong>end</strong> (optional) (default:null)</em>: The row to end on [inclusive]</li>
@@ -49,7 +49,7 @@ class AwesomePHPCSV
         $defaults = array(
             'pathToFile' => '',
             'file' => null,
-            'hasHeadingRow' => false,
+            'hasHeaderRow' => false,
             'columns' => null,
             'start' => 1,
             'end' => null,
@@ -62,7 +62,7 @@ class AwesomePHPCSV
         $columns = $options['columns'];
         $debug = $options['debug'];
         $end = $options['end'];
-        $hasHeadingRow = $options['hasHeadingRow'];
+        $hasHeaderRow = $options['hasHeaderRow'];
         $file = $options['file'];
         $loopLimit = $options['loopLimit'];
         $pathToFile = $options['pathToFile'];
@@ -82,7 +82,7 @@ class AwesomePHPCSV
         $parsedCSV = array();
         for ($i = $start - 1; $i < count($file); $i++) {
             $line = $file[$i];
-            if ($hasHeadingRow && $i == 0) {
+            if ($hasHeaderRow && $i == 0) {
                 // skip heading row
                 continue;
             } elseif ($end && $i > $end - 1) {
