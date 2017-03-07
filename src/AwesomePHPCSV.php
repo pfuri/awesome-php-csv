@@ -12,7 +12,7 @@
  *
  * @copyright 2016 Paul Furiani
  *
- * @version 1.3.1
+ * @version 2.1.0
  *
  */
 
@@ -31,8 +31,8 @@ class AwesomePHPCSV
      * 		<ul>
      * 			<li><em>string <strong>pathToFile</strong> (required)</em>: The full path to the csv file to be parsed <em>(note: if file is used instead of pathToFile, then pathToFile is not required)</em></li>
      * 			<li><em>array <strong>file</strong> (optional)</em>: The CSV file in array format, where each row of the CSV is a string in the array <em>(note: must not include line endings)</em>
-     * 			<li><em>boolean <strong>hasHeaderRow</strong> (optional) (default: false)</em>: Whether or not the csv has a heading row to ignore</li>
-     *          <li><em>boolean <strong>mapColumns</strong> (optional) (default: false)</em>: Whether or not to use the first row values as keys for the rest of the rows in the returned results. The first row will not be returned in the results (may slow performance)</li>
+     * 			<li><em>boolean <strong>skipHeaderRow</strong> (optional) (default: false)</em>: Whether or not to skip the first row</li>
+     *          <li><em>boolean <strong>mapColumns</strong> (optional) (default: false)</em>: use the values from the first row as associative array keys for the rest of the rows in the returned results (may lower performance)</li>
      *			<li><em>int <strong>columns</strong> (optional) (default: null): Enables column validation by specifying how many the columns each row should have.  If the csv contains a row without exactly this many columns, import will fail</li>
      *			<li><em>int <strong>start</strong> (optional) (default:1)</em>: The row to start on [inclusive]</li>
      *			<li><em>int <strong>end</strong> (optional) (default:null)</em>: The row to end on [inclusive]</li>
@@ -50,7 +50,7 @@ class AwesomePHPCSV
         $defaults = array(
             'pathToFile' => '',
             'file' => null,
-            'hasHeaderRow' => false,
+            'skipHeaderRow' => false,
             'mapColumns' => false,
             'columns' => null,
             'start' => 1,
@@ -64,7 +64,7 @@ class AwesomePHPCSV
         $columns = $options['columns'];
         $debug = $options['debug'];
         $end = $options['end'];
-        $hasHeaderRow = $options['hasHeaderRow'];
+        $skipHeaderRow = $options['skipHeaderRow'];
         $mapColumns = $options['mapColumns'];
         $file = $options['file'];
         $loopLimit = $options['loopLimit'];
@@ -86,8 +86,8 @@ class AwesomePHPCSV
         $parsedCSV = array();
         for ($i = $start - 1; $i < count($file); $i++) {
             $line = $file[$i];
-            if ($hasHeaderRow && $i == 0) {
-                // skip heading row
+            if ($skipHeaderRow && $i == 0) {
+                // skip header row
                 continue;
             } elseif ($end && $i > $end - 1) {
                 // stop at end row
