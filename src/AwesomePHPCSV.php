@@ -85,8 +85,8 @@ class AwesomePHPCSV
             if ($hasHeadingRow && $i == 0) {
                 // skip heading row
                 continue;
-            } elseif ($end && $i > $end) {
-                // stop at end
+            } elseif ($end && $i > $end - 1) {
+                // stop at end row
                 break;
             } elseif (trim($line) == "") {
                 // skip empty lines
