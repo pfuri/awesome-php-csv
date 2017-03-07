@@ -22,8 +22,8 @@
 
     // create the options array
     $options = array(
-    'pathToFile' => 'example.csv',
-    'hasHeadingRow' => true
+        'pathToFile' => 'example.csv',
+        'hasHeaderRow' => true
     );
     
     // create an AwesomePHPCSV instance
