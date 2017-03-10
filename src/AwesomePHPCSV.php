@@ -54,7 +54,7 @@ class AwesomePHPCSV
             'mapColumns' => false,
             'columns' => null,
             'start' => 1,
-            'end' => null,
+            'end' => -1,
             'loopLimit' => 100,
             'debug' => false
         );
@@ -63,7 +63,7 @@ class AwesomePHPCSV
         // safe extract
         $columns = $options['columns'];
         $debug = $options['debug'];
-        $end = $options['end'];
+        $end = intval($options['end']);
         $skipHeaderRow = $options['skipHeaderRow'];
         $mapColumns = $options['mapColumns'];
         $file = $options['file'];
@@ -94,12 +94,16 @@ class AwesomePHPCSV
 
         // parse CSV
         $parsedCSV = array();
+        $test = array();
         for ($i = $start - 1; $i < count($file); $i++) {
+            // get the line
             $line = $file[$i];
+
+            // check if this line should be skipped
             if ($skipHeaderRow && $i == 0) {
                 // skip header row
                 continue;
-            } elseif ($end && $i > $end - 1) {
+            } elseif ($end > 0 && $i >= $end) {
                 // stop at end row
                 break;
             } elseif (trim($line) == "") {
@@ -107,6 +111,7 @@ class AwesomePHPCSV
                 continue;
             }
 
+            // parse line
             $rowData = $this->parseLine($line, $headerRow);
             if($rowData === false) {
                 // error
@@ -128,14 +133,6 @@ class AwesomePHPCSV
 
         // return CSV array
         return $parsedCSV;
-    }
-
-    /**
-     * resets the error messages
-     */
-    public function reset()
-    {
-        $this->errorMessages = array();
     }
 
     private function parseLine($line = '', $columnMap = false, $loopLimit = 100) {
@@ -260,5 +257,13 @@ class AwesomePHPCSV
 
         // return the parsed row
         return $rowData;
+    }
+
+    /**
+     * resets the error messages
+     */
+    public function reset()
+    {
+        $this->errorMessages = array();
     }
 }
