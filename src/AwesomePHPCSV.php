@@ -12,7 +12,7 @@
  *
  * @copyright 2016 Paul Furiani
  *
- * @version 2.1.0
+ * @version 2.1.1
  *
  */
 
